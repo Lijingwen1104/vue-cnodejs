@@ -24,9 +24,6 @@
         },
         methods:{
             changePage:function(pageId){
-                console.log(pageId)
-
-                console.log(localStorage.accesstoken);
                 Router.push({path:"/"+pageId})
             }
         }

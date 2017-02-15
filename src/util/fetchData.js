@@ -28,6 +28,10 @@ export default {
   ups(replyId,accesstoken){
     let requestUrl = `/api/v1/reply/${replyId}/ups`;
      return fetchData(requestUrl,"post",{accesstoken:accesstoken});
+  },
+  publish(accesstoken,title,tab,content){
+    let requestUrl = `/api/v1/topics`;
+     return fetchData(requestUrl,"post",{accesstoken:accesstoken,title:title,tab:tab,content:content});
   }
 }
 

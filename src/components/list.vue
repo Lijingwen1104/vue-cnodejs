@@ -40,9 +40,6 @@
     
     created: function(){
       var self = this;
-      console.log("created");
-      // console.log(VueRouter);
-      // this.article="这是list传递的文章内容";
       fetchData.getTopics("",1,6)
         .then(res=>{
           self.articleList=res.data;

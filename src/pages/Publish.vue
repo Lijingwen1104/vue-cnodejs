@@ -1,20 +1,19 @@
 <template>
     <div class="publish">
-        <div class="pubBut">
-            <span class="iconfont">&#xe698;</span> 发布
+        <div class="back">
+            <span @click="publish" class="iconfont">&#xe698;</span> 发布
         </div>
         <div class="item">
-            <select>  
-                <option value ="2">分享</option>  
-                <option value="3">问答</option>  
-                <option value="4">招聘</option>  
+            <select v-model="tab" >  
+                <option value="">选择分类</option>  
+                <option  v-for="tab in tabs" :value ="tab.tabId">{{tab.tabName}}</option>  
             </select> 
         </div>
         <div class="item">
-            <input type="text" placeholder="标题字数 10 字以上">
+            <input  v-model="title" type="text" placeholder="标题字数 10 字以上">
         </div>
         <div class="item">
-            <textarea placeholder="内容字数 30 字以上"></textarea>
+            <textarea v-model="content" placeholder="内容字数 30 字以上"></textarea>
         </div>
         <foot></foot>
     </div>
@@ -29,11 +28,39 @@ export  default{
     },
     data:function(){
         return{
-            
+            tabs:[
+                {tabId:"ask",tabName:"问答"},
+                {tabId:"share",tabName:"分享"},
+                {tabId:"job",tabName:"工作"}
+            ],
+            tab:"",
+            title:"",
+            content:""
         }
     },
     methods:{
-
+        publish:function(){
+            var self=this;
+            var title=this.title;
+            var content=this.content;
+            var tab=this.tab;
+            var accesstoken=localStorage.accesstoken;
+            if(tab==""||title==""||content==""){
+                alert("你确定都填完了么？");
+            }else{
+                fetchData.publish(accesstoken,title,tab,content)
+                    .then(res=>{
+                        console.log(res);
+                        if(res.success){
+                            alert("发布成功");
+                            Router.push({name:'article',params:{id:res.topic_id},query:{from:'/'}})
+                        }
+                    })
+            }
+            // console.log(this.tab)
+            // console.log(this.title)
+            // console.log(this.content)
+        }
     }
 }
 </script>
@@ -79,18 +106,11 @@ textarea,input{
     border:none;
     
 }
-.pubBut{
-    background-color: $green;
-    margin:0px;    
-    color: #ffffff;
-    font-weight: bold;
-    padding: 0.6rem 0;
-    text-align: center;
+.back{
     position: relative;
-    font-size: 1.1rem;
     span{
-        position: relative;
-        left: 35%;
+        position: absolute;
+        right: 2rem;
     }
 }
 </style>

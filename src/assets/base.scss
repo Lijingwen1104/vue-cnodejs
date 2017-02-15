@@ -1,12 +1,11 @@
 $green:#80bd01;
-
 @font-face {
   font-family: 'iconfont';  /* project id 230624 */
-  src: url('//at.alicdn.com/t/font_b1caavs5kudkuik9.eot');
-  src: url('//at.alicdn.com/t/font_b1caavs5kudkuik9.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_b1caavs5kudkuik9.woff') format('woff'),
-  url('//at.alicdn.com/t/font_b1caavs5kudkuik9.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_b1caavs5kudkuik9.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_gxo4l1u25d0a4i.eot');
+  src: url('//at.alicdn.com/t/font_gxo4l1u25d0a4i.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_gxo4l1u25d0a4i.woff') format('woff'),
+  url('//at.alicdn.com/t/font_gxo4l1u25d0a4i.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_gxo4l1u25d0a4i.svg#iconfont') format('svg');
 }
 .iconfont {
     font-family:"iconfont" !important;
@@ -28,4 +27,22 @@ code{
 body{
     margin:0;
     font-family:"Microsoft YaHei"
+}
+.back{
+    background-color: $green;
+    margin:0px;    
+    color: #ffffff;
+    font-weight: bold;
+    padding: 0.6rem 0;
+    text-align: center;
+    position: absolute;
+    margin:0;
+    top:0;
+    left: 0;
+    width: 100%;
+    font-size: 1.1rem;
+    span{
+        position: relative;
+        right: 35%;
+    }
 }

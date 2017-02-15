@@ -30,7 +30,6 @@
       clickTab:function(tab){
         var self = this;
         this.$emit('change',{sectionName:tab.tabId});
-        console.log(tab.tabId);
       },
       // changeSection222:function () {
       //   var arr=['ask','good','job','share','all'];

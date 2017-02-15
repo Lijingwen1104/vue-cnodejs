@@ -1,5 +1,8 @@
 <template>
     <div class="mine">
+        <div class="back">
+            个人中心<span @click="logout" class="iconfont">&#xe642;</span>
+        </div>
         <div class="userIndex">
             <img class="userImg" v-bind:src="user.avatar_url" alt="">
             <p>{{user.loginname}}</p>
@@ -56,7 +59,8 @@ export  default{
     beforeCreate:function(){
          var loginname=localStorage.loginname;
          if(!loginname){
-             Router.push({path:'/login',query:{from:'/mine'}})
+             Router.push({path:'login',query:{from:'/home'}})
+            //  Router.push({name:'article',params:{id:id},query:{from:'/'}})
          }
 
     },
@@ -70,14 +74,16 @@ export  default{
         var self=this;
         var loginname=localStorage.loginname;
         // console.log(Router)
-        fetchData.userInfo(loginname)
-            .then(res=>{
-                if(res.success){
-                    self.user=res.data;
-                    console.log(self.user);
-                }
+        if(loginname){
+            fetchData.userInfo(loginname)
+                .then(res=>{
+                    if(res.success){
+                        self.user=res.data;
+                        console.log(self.user);
+                    }
 
-            })
+                })
+        }
     },
     methods:{
         changeTopics:function(recentId){
@@ -86,6 +92,10 @@ export  default{
         },
         toDetail:function(id){
             Router.push({name:'article',params:{id:id},query:{from:'/mine'}})
+        },
+        logout:function(){
+            localStorage.clear();
+            Router.push({ path: "/home" })
         }
     }
 }
@@ -93,10 +103,12 @@ export  default{
 <style scoped lang="scss">
 $green:#80bd01;
 .userIndex{
-    border-top: 1px solid;
+    border-top: 1px solid #ffffff;
     background-color: lighten($green,1%);
     color:#ffffff;
     padding:0.6rem 0 ;
+    margin-top: 2.6rem;
+    box-sizing: border-box;
 }
 .userImg{
     display: block;
@@ -151,6 +163,14 @@ p{
     .time{
         text-align: right;
         float: right;
+    }
+}
+.back{
+    span{
+        right: 2rem;
+        font-size: 1.5rem;
+        position: absolute;
+
     }
 }
 </style>
