@@ -1,20 +1,25 @@
 <template>
     <div class="publish">
         <div class="back">
-            <span @click="publish" class="iconfont">&#xe698;</span> 发布
+            <span @click="publish" class="iconfont">&#xe698;</span> 发布主题
         </div>
-        <div class="item">
-            <select v-model="tab" >  
-                <option value="">选择分类</option>  
-                <option  v-for="tab in tabs" :value ="tab.tabId">{{tab.tabName}}</option>  
-            </select> 
+        <div v-if="isLogin">
+            <div class="item">
+                <select v-model="tab" >  
+                    <option value="">选择分类</option>  
+                    <option  v-for="tab in tabs" :value ="tab.tabId">{{tab.tabName}}</option>  
+                </select> 
+            </div>
+            <div class="item">
+                <input  v-model="title" type="text" placeholder="标题字数 10 字以上">
+            </div>
+            <div class="item">
+                <textarea v-model="content" placeholder="内容字数 30 字以上"></textarea>
+            </div>
         </div>
-        <div class="item">
-            <input  v-model="title" type="text" placeholder="标题字数 10 字以上">
-        </div>
-        <div class="item">
-            <textarea v-model="content" placeholder="内容字数 30 字以上"></textarea>
-        </div>
+        <p class="tologin" v-if="!isLogin">
+            您还没有登陆，请<span @click="tologin">登录</span>
+        </p>
         <foot></foot>
     </div>
 </template>
@@ -26,6 +31,9 @@ export  default{
     components:{
         foot
     },
+    created:function(){
+        console.log(this.isLogin);
+    },
     data:function(){
         return{
             tabs:[
@@ -35,7 +43,8 @@ export  default{
             ],
             tab:"",
             title:"",
-            content:""
+            content:"",
+            isLogin:!!localStorage.accesstoken
         }
     },
     methods:{
@@ -60,6 +69,9 @@ export  default{
             // console.log(this.tab)
             // console.log(this.title)
             // console.log(this.content)
+        },
+        tologin:function(){
+            Router.push({path:'login',query:{from:'/publish'}})
         }
     }
 }
@@ -112,5 +124,12 @@ textarea,input{
         position: absolute;
         right: 2rem;
     }
+}
+.tologin{
+margin-top: 1rem;
+span{
+    color:$green;
+    padding: 0.5rem;
+}
 }
 </style>

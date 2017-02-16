@@ -32,6 +32,10 @@ export default {
   publish(accesstoken,title,tab,content){
     let requestUrl = `/api/v1/topics`;
      return fetchData(requestUrl,"post",{accesstoken:accesstoken,title:title,tab:tab,content:content});
+  },
+ getMessages(accesstoken,mdrender){
+    let requestUrl = `/api/v1/messages?accesstoken=${accesstoken}&mdrender=${mdrender}`;
+    return fetchData(requestUrl);
   }
 }
 
