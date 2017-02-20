@@ -36,6 +36,10 @@ export default {
  getMessages(accesstoken,mdrender){
     let requestUrl = `/api/v1/messages?accesstoken=${accesstoken}&mdrender=${mdrender}`;
     return fetchData(requestUrl);
+  },
+  getMessageCount(accesstoken){
+    let requestUrl = `/api/v1/message/count?accesstoken=${accesstoken}`;
+    return fetchData(requestUrl);
   }
 }
 

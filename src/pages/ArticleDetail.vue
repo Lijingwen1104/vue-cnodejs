@@ -25,10 +25,13 @@
                 </div>
                 <p class="iconfont">
                     <span @click="ups(reply.id)"> {{reply.ups.length}} 点赞 &#xe608;</span>
-                    <span>回复 &#xe632; </span>
+                    <!--<span  @click="toggleArea(reply.isActive)">回复 &#xe632; </span>-->
+                    <span  @click="reply.isActive=!reply.isActive">回复 &#xe632; </span>
                 </p>
-                <textarea class="replyPersonContent"  v-model="replyPersonContent" placeholder="回复内容"></textarea>
-                <div class="replyPerson"  @click="replyPerson(reply.id)">回复</div>
+                <div  v-bind:class="{active:reply.isActive}">
+                    <textarea class="replyPersonContent"  v-model="reply.replyPersonContent" :placeholder="'@'+reply.author.loginname" ></textarea>
+                    <div class="replyPerson"  @click="replyPerson(reply.id,reply.author.loginname,reply.replyPersonContent)">回复</div>
+                </div>
             </div>
         </article>
         <article>
@@ -48,17 +51,23 @@
             return {
                 article: {},
                 replyArticleContent:"",
-                replyPersonContent:""
+                // replyPersonContent:""
             }
         },
         created: function () {
             var self = this;
-            console.log(this.$route)
+            // console.log(this.$route)
             var id = this.$route.params.id;
             fetchData.getTopicInfo(id)
                 .then(res => {
                     if (res.success) {
                         self.article = res.data;
+                        for (var i = 0; i < self.article.replies.length; i++) {
+                            // var element = array[i];
+                            self.article.replies[i].isActive=true;
+                            
+                        }
+                        
                     }
                 })
         },
@@ -116,8 +125,7 @@
                 }
                 console.log(this.article);
             },
-            replyPerson:function(replyId){
-                var replyPersonContent=this.replyPersonContent;
+            replyPerson:function(replyId,loginname,replyPersonContent){
                 var accesstoken=localStorage.accesstoken;
                 var self=this;
                 var articleId=self.article.id;
@@ -125,8 +133,9 @@
                 if(replyPersonContent==""){
                     alert("请输入内容")
                 }else{
-                    console.log(this.replyPersonContent);
-                    fetchData.setRepliy(articleId,accesstoken,self.replyPersonContent,replyId)
+                    console.log(replyPersonContent);
+                    replyPersonContent="@"+loginname+" "+replyPersonContent;
+                    fetchData.setRepliy(articleId,accesstoken,replyPersonContent,replyId)
                         .then(res => {
                                 console.log(res)
                                 
@@ -160,6 +169,10 @@
                                     }
                                 })
                         })
+            },
+            toggleArea:function(isActive){
+                isActive = !isActive;
+                console.log(isActive);
             }
         }
     }
@@ -223,7 +236,7 @@
     }
     .reply{
         border-bottom:3px solid $bgc;
-        padding :0.5rem 0 4rem 0;
+        padding :0.5rem 0 1rem 0;
         &:nth-last-of-type(1){
             border:none;
         }
@@ -300,4 +313,13 @@
         height: 120px;
         margin: 0 auto;
     }
+    .area{
+        display: none;
+        position: relative;
+        padding-bottom: 3rem;
+    }
+    .active{
+        display: none;
+    }
+
 </style>

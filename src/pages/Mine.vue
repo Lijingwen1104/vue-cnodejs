@@ -27,7 +27,7 @@
                 </span>
             </li>
         </ul>
-        <foot></foot>
+        <foot footId="mine"></foot>
     </div>
 </template>
 <script>
@@ -79,7 +79,7 @@ export  default{
                 .then(res=>{
                     if(res.success){
                         self.user=res.data;
-                        console.log(self.user);
+                        // console.log(self.user);
                     }
 
                 })

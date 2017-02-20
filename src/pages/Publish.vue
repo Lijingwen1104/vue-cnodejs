@@ -20,7 +20,7 @@
         <p class="tologin" v-if="!isLogin">
             您还没有登陆，请<span @click="tologin">登录</span>
         </p>
-        <foot></foot>
+        <foot footId="publish"></foot>
     </div>
 </template>
 <script>
@@ -32,7 +32,7 @@ export  default{
         foot
     },
     created:function(){
-        console.log(this.isLogin);
+        // console.log(this.isLogin);
     },
     data:function(){
         return{

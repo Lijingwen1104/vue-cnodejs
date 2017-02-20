@@ -2,12 +2,12 @@
   <div class="home">
     <tab :section="section" v-on:change="setSection"></tab>
     <list :section="section"></list>
-    <foot></foot>
+    <foot footId="home"></foot>
   </div>
 </template>
 
 <script>
-//  import fetchData from '../util/fetchData';
+ import fetchData from '../util/fetchData';
   import list from '../components/list.vue';
   import tab from '../components/tab.vue';
   import foot from '../components/footer.vue';
@@ -19,7 +19,7 @@
       foot
     },
     created:function(){
-      // console.log(Router)
+      // console.log(Router) 
         // Router.push({name:"login"});
     },
     data: function () {
