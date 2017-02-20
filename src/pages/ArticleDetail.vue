@@ -41,6 +41,7 @@
     </div>
 </template>
 <script>
+  import Vue from 'vue';
     import fetchData from '../util/fetchData';
     var timeago = require("timeago.js");
     var timeagoInstance = new timeago();
@@ -64,10 +65,10 @@
                         self.article = res.data;
                         for (var i = 0; i < self.article.replies.length; i++) {
                             // var element = array[i];
-                            self.article.replies[i].isActive=true;
-                            
+//                            self.article.replies.$set(i,{isActive:true});
+                          Vue.set(self.article.replies[i],'isActive',true);
                         }
-                        
+
                     }
                 })
         },
@@ -111,7 +112,7 @@
                     fetchData.setRepliy(articleId,accesstoken,self.replyArticleContent)
                         .then(res => {
                                 console.log(res)
-                                
+
                             // if (res.success) {
                             // }
                             fetchData.getTopicInfo(articleId)
@@ -138,7 +139,7 @@
                     fetchData.setRepliy(articleId,accesstoken,replyPersonContent,replyId)
                         .then(res => {
                                 console.log(res)
-                                
+
                             // if (res.success) {
                             // }
                             fetchData.getTopicInfo(articleId)
@@ -159,7 +160,7 @@
                 fetchData.ups(replyId,accesstoken)
                         .then(res => {
                                 console.log(res)
-                                
+
                             // if (res.success) {
                             // }
                             fetchData.getTopicInfo(articleId)
@@ -194,14 +195,14 @@
         padding:2rem 0.5rem 3.5rem 0.5rem;
         overflow: hidden;
         background-color: $bgc;
-        
+
     }
     article{
         background-color: $w;
         border-radius:$br;
         padding:0 0.4rem ;
         margin:1rem 0;
-        
+
     }
     header{
         border-bottom: 1px solid $bgc;
@@ -209,7 +210,7 @@
     }
     h3{
         word-break:break-all;
-        text-align: center;   
+        text-align: center;
     }
     ul{
         color: darken($bgc,40%);
@@ -222,7 +223,7 @@
         margin: 0;
         padding:0;
         &:before{
-         content: "·" ; 
+         content: "·" ;
         }
     }
     .content{
@@ -232,7 +233,7 @@
          word-wrap:break-word;
          word-break:break-all;
         /*white-space:*/
-        
+
     }
     .reply{
         border-bottom:3px solid $bgc;
@@ -263,7 +264,7 @@
     }
     .back{
         background-color: $green;
-        margin:0px;    
+        margin:0px;
         color: #ffffff;
         font-weight: bold;
         padding: 0.6rem 0;
@@ -303,7 +304,7 @@
     .replyPerson{
         right:2.5rem;
         margin-top: 0.5rem;
-    
+
     }
     .replyPersonContent{
         border:1px solid;
