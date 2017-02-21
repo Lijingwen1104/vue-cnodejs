@@ -4,8 +4,8 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    index: path.resolve(__dirname, '../dest/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dest'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     productionSourceMap: true,
@@ -14,7 +14,14 @@ module.exports = {
     // Before setting to `true`, make sure to:
     // npm install --save-dev compression-webpack-plugin
     productionGzip: false,
-    productionGzipExtensions: ['js', 'css']
+    productionGzipExtensions: ['js', 'css'],
+    proxyTable: {
+      '/api': {
+        target: 'https://cnodejs.org',
+        changeOrigin:true
+      }
+    },
+    port:8099
   },
   dev: {
     env: require('./dev.env'),
