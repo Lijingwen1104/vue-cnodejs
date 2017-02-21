@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
-    "build": "node build/build.js && pm2 start build/prod-server.js",
+    "build": "node build/build.js && pm2 startOrReload pm2.json",
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
