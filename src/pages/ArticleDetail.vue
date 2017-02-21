@@ -2,7 +2,7 @@
     <div class="article">
         <!--<h1 @click="back">back</h1>-->
         <div class="back">
-            <span  @click="back" class="iconfont">&#xe617;</span>详情
+            <span @click="back" class="iconfont">&#xe617;</span>详情
         </div>
         <article>
             <header>
@@ -24,24 +24,24 @@
                 <div class="content" v-html="reply.content">
                 </div>
                 <p class="iconfont">
-                    <span @click="ups(reply.id)"> {{reply.ups.length}} 点赞 &#xe608;</span>
+                    <span @click="ups(reply)" v-bind:class="{ups:reply.isUps}" >{{reply.ups.length}} 点赞 &#xe608;</span>
                     <!--<span  @click="toggleArea(reply.isActive)">回复 &#xe632; </span>-->
-                    <span  @click="reply.isActive=!reply.isActive">回复 &#xe632; </span>
+                    <span @click="reply.isActive=!reply.isActive">回复 &#xe632; </span>
                 </p>
-                <div  v-bind:class="{active:reply.isActive}">
-                    <textarea class="replyPersonContent"  v-model="reply.replyPersonContent" :placeholder="'@'+reply.author.loginname" ></textarea>
-                    <div class="replyPerson"  @click="replyPerson(reply.id,reply.author.loginname,reply.replyPersonContent)">回复</div>
+                <div v-bind:class="['area',{active:reply.isActive}]">
+                    <textarea class="replyPersonContent" v-model="reply.replyPersonContent" :placeholder="'@'+reply.author.loginname"></textarea>
+                    <div class="replyPerson" @click="replyPerson(reply.id,reply.author.loginname,reply.replyPersonContent)">回复</div>
                 </div>
             </div>
         </article>
         <article>
-            <textarea  v-model="replyArticleContent" placeholder="回复支持Markdown语法,请注意标记代码"></textarea>
+            <textarea v-model="replyArticleContent" placeholder="回复支持Markdown语法,请注意标记代码"></textarea>
         </article>
-        <div class="replyArticle"  @click="replyArticle">评论</div>
+        <div class="replyArticle" @click="replyArticle">评论</div>
     </div>
 </template>
 <script>
-  import Vue from 'vue';
+    import Vue from 'vue';
     import fetchData from '../util/fetchData';
     var timeago = require("timeago.js");
     var timeagoInstance = new timeago();
@@ -51,8 +51,7 @@
         data() {
             return {
                 article: {},
-                replyArticleContent:"",
-                // replyPersonContent:""
+                replyArticleContent: "",
             }
         },
         created: function () {
@@ -63,10 +62,16 @@
                 .then(res => {
                     if (res.success) {
                         self.article = res.data;
-                        for (var i = 0; i < self.article.replies.length; i++) {
-                            // var element = array[i];
-//                            self.article.replies.$set(i,{isActive:true});
-                          Vue.set(self.article.replies[i],'isActive',true);
+                        var replies=self.article.replies;
+                        var userid =localStorage.id;
+                        for (var i = 0; i < replies.length; i++) {
+                            var isUps=false;
+                                if(replies[i].ups.join(",").indexOf(userid)>-1){
+                                    isUps=true;
+                                }
+                            Vue.set(replies[i], 'isActive', false);
+                            Vue.set(replies[i], 'isUps', isUps);
+                                
                         }
 
                     }
@@ -84,7 +89,7 @@
             },
             resetTime: function (time) {
                 return timeagoInstance.format(time, 'zh_CN');
-            }
+            },
         },
         // watch:{
         //     article:function(){
@@ -95,24 +100,21 @@
         // },
         methods: {
             back: function () {
-                console.log(111)
                 let from = this.$route.query.from || '/';
                 Router.push({ path: from })
             },
-            replyArticle:function(){
-                var replyArticleContent=this.replyArticleContent;
-                var accesstoken=localStorage.accesstoken;
-                var self=this;
-                var articleId=self.article.id;
+            replyArticle: function () {
+                var replyArticleContent = this.replyArticleContent;
+                var accesstoken = localStorage.accesstoken;
+                var self = this;
+                var articleId = self.article.id;
                 // console.log()
-                if(replyArticleContent==""){
+                if (replyArticleContent == "") {
                     alert("请输入内容")
-                }else{
+                } else {
                     console.log(this.replyArticleContent);
-                    fetchData.setRepliy(articleId,accesstoken,self.replyArticleContent)
+                    fetchData.setRepliy(articleId, accesstoken, self.replyArticleContent)
                         .then(res => {
-                                console.log(res)
-
                             // if (res.success) {
                             // }
                             fetchData.getTopicInfo(articleId)
@@ -126,19 +128,19 @@
                 }
                 console.log(this.article);
             },
-            replyPerson:function(replyId,loginname,replyPersonContent){
-                var accesstoken=localStorage.accesstoken;
-                var self=this;
-                var articleId=self.article.id;
+            replyPerson: function (replyId, loginname, replyPersonContent) {
+                var accesstoken = localStorage.accesstoken;
+                var self = this;
+                var articleId = self.article.id;
                 // console.log()
-                if(replyPersonContent==""){
+                if (replyPersonContent == "") {
                     alert("请输入内容")
-                }else{
+                } else {
                     console.log(replyPersonContent);
-                    replyPersonContent="@"+loginname+" "+replyPersonContent;
-                    fetchData.setRepliy(articleId,accesstoken,replyPersonContent,replyId)
+                    replyPersonContent = "@" + loginname + " " + replyPersonContent;
+                    fetchData.setRepliy(articleId, accesstoken, replyPersonContent, replyId)
                         .then(res => {
-                                console.log(res)
+                            console.log(res)
 
                             // if (res.success) {
                             // }
@@ -152,28 +154,25 @@
 
                 }
             },
-            ups:function(replyId){
-                console.log(replyId);
-                var self =this;
-                var accesstoken=localStorage.accesstoken;
-                var articleId=self.article.id;
-                fetchData.ups(replyId,accesstoken)
-                        .then(res => {
-                                console.log(res)
-
-                            // if (res.success) {
-                            // }
-                            fetchData.getTopicInfo(articleId)
-                                .then(res => {
-                                    if (res.success) {
-                                        self.article = res.data;
-                                    }
-                                })
-                        })
+            ups: function (reply) {
+                var replyId=reply.id;
+                var isUps=reply.isUps;
+                var self = this;
+                var accesstoken = localStorage.accesstoken;
+                var articleId = self.article.id;
+                fetchData.ups(replyId, accesstoken)
+                    .then(res => {
+                        Vue.set(reply, 'isUps', !isUps);
+                        if(res.action=="up"){
+                            reply.ups.push(replyId);
+                        }
+                        if(res.action=="down"){
+                            reply.ups.pop();
+                        }
+                    })
             },
-            toggleArea:function(isActive){
+            toggleArea: function (isActive) {
                 isActive = !isActive;
-                console.log(isActive);
             }
         }
     }
@@ -320,7 +319,10 @@
         padding-bottom: 3rem;
     }
     .active{
-        display: none;
+        display: block;
+    }
+    .ups{
+        color:$green;
     }
 
 </style>
