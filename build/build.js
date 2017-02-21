@@ -15,6 +15,12 @@ console.log(
   '  Opening index.html over file:// won\'t work.\n'
 )
 
+//删除dest文件夹
+child = exec('rm -rf dest',function(err,out) {
+  console.log(out); err && console.log(err);
+
+});
+
 var spinner = ora('building for production...')
 spinner.start()
 
