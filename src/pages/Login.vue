@@ -22,7 +22,7 @@
         },
         methods: {
             back: function () {
-                console.log(111)
+                // console.log(111)
                 let from = this.$route.query.from || '/';
                 Router.push({ path: from })
                 // console.log(this.$route.query.from)

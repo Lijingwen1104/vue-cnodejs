@@ -25,7 +25,6 @@
                 </div>
                 <p class="iconfont">
                     <span @click="ups(reply)" v-bind:class="{ups:reply.isUps}" >{{reply.ups.length}} 点赞 &#xe608;</span>
-                    <!--<span  @click="toggleArea(reply.isActive)">回复 &#xe632; </span>-->
                     <span @click="reply.isActive=!reply.isActive">回复 &#xe632; </span>
                 </p>
                 <div v-bind:class="['area',{active:reply.isActive}]">
@@ -104,75 +103,84 @@
                 Router.push({ path: from })
             },
             replyArticle: function () {
-                var replyArticleContent = this.replyArticleContent;
                 var accesstoken = localStorage.accesstoken;
-                var self = this;
-                var articleId = self.article.id;
-                // console.log()
-                if (replyArticleContent == "") {
-                    alert("请输入内容")
-                } else {
-                    console.log(this.replyArticleContent);
-                    fetchData.setRepliy(articleId, accesstoken, self.replyArticleContent)
-                        .then(res => {
-                            // if (res.success) {
-                            // }
-                            fetchData.getTopicInfo(articleId)
-                                .then(res => {
-                                    if (res.success) {
-                                        self.article = res.data;
-                                    }
-                                })
-                        })
+                if(accesstoken){
+                    var replyArticleContent = this.replyArticleContent;
+                    var self = this;
+                    var articleId = self.article.id;
+                    // console.log()
+                    if (replyArticleContent == "") {
+                        alert("请输入内容")
+                    } else {
+                        console.log(this.replyArticleContent);
+                        fetchData.setRepliy(articleId, accesstoken, self.replyArticleContent)
+                            .then(res => {
+                                // if (res.success) {
+                                // }
+                                fetchData.getTopicInfo(articleId)
+                                    .then(res => {
+                                        if (res.success) {
+                                            self.article = res.data;
+                                        }
+                                    })
+                            })
 
+                    }
+
+                }else{
+                     alert("请先登录");
                 }
-                console.log(this.article);
             },
             replyPerson: function (replyId, loginname, replyPersonContent) {
                 var accesstoken = localStorage.accesstoken;
+                if(accesstoken ){
+                    if (replyPersonContent == "") {
+                        alert("请输入内容")
+                    } else {
+                        console.log(replyPersonContent);
+                        replyPersonContent = "@" + loginname + " " + replyPersonContent;
+                        fetchData.setRepliy(articleId, accesstoken, replyPersonContent, replyId)
+                            .then(res => {
+                                console.log(res)
+
+                                // if (res.success) {
+                                // }
+                                fetchData.getTopicInfo(articleId)
+                                    .then(res => {
+                                        if (res.success) {
+                                            self.article = res.data;
+                                        }
+                                    })
+                            })
+                    }
+
+                }else{
+                    alert("请先登录")
+                }
                 var self = this;
                 var articleId = self.article.id;
                 // console.log()
-                if (replyPersonContent == "") {
-                    alert("请输入内容")
-                } else {
-                    console.log(replyPersonContent);
-                    replyPersonContent = "@" + loginname + " " + replyPersonContent;
-                    fetchData.setRepliy(articleId, accesstoken, replyPersonContent, replyId)
-                        .then(res => {
-                            console.log(res)
-
-                            // if (res.success) {
-                            // }
-                            fetchData.getTopicInfo(articleId)
-                                .then(res => {
-                                    if (res.success) {
-                                        self.article = res.data;
-                                    }
-                                })
-                        })
-
-                }
             },
             ups: function (reply) {
-                var replyId=reply.id;
-                var isUps=reply.isUps;
-                var self = this;
                 var accesstoken = localStorage.accesstoken;
-                var articleId = self.article.id;
-                fetchData.ups(replyId, accesstoken)
-                    .then(res => {
-                        Vue.set(reply, 'isUps', !isUps);
-                        if(res.action=="up"){
-                            reply.ups.push(replyId);
-                        }
-                        if(res.action=="down"){
-                            reply.ups.pop();
-                        }
-                    })
-            },
-            toggleArea: function (isActive) {
-                isActive = !isActive;
+                if( accesstoken){
+                    var replyId=reply.id;
+                    var isUps=reply.isUps;
+                    var self = this;
+                    var articleId = self.article.id;
+                    fetchData.ups(replyId, accesstoken)
+                        .then(res => {
+                            Vue.set(reply, 'isUps', !isUps);
+                            if(res.action=="up"){
+                                reply.ups.push(replyId);
+                            }
+                            if(res.action=="down"){
+                                reply.ups.pop();
+                            }
+                        })
+                }else{
+                    alert("请先登录");
+                }
             }
         }
     }
