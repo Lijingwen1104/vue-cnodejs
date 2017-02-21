@@ -33,15 +33,18 @@
             // console.log(this.messageCount+"9999999999");
             var self=this;
             var accesstoken=localStorage.accesstoken;
-            fetchData.getMessageCount(accesstoken)
-                .then(res=>{
-                    if(res.success){
-                        self.messageCount=res.data;
-                    }
-                    // self.messages=res.data;
-                    // console.log(self.messageCount);
-                    self.foot[2].num=self.messageCount;
-                })
+            if(accesstoken){
+                fetchData.getMessageCount(accesstoken)
+                    .then(res=>{
+                        if(res.success){
+                            self.messageCount=res.data;
+                        }
+                        // self.messages=res.data;
+                        // console.log(self.messageCount);
+                        self.foot[2].num=self.messageCount;
+                    })
+            }
+            
         },
         
         methods:{
